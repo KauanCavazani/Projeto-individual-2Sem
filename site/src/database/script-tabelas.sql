@@ -192,7 +192,7 @@ INSERT INTO metrica (idMetrica, nomeComponente, nomeMetrica, nomeView, comando, 
 INSERT INTO metrica (idMetrica, nomeComponente, nomeMetrica, nomeView, comando, unidadeMedida, isTupla) VALUES 
 (3, 'DISCO', 'Porcentagem de uso', 'diskPercent', 'psutil.disk_usage("/").percent', '%', FALSE);
 INSERT INTO metrica (idMetrica, nomeComponente, nomeMetrica, nomeView, comando, unidadeMedida, isTupla) VALUES 
-(4, 'CPU', 'Temperatura', 'cpuTemp', '', '°C', FALSE);
+(4, 'CPU', 'Temperatura', 'cpuTemp', 'psutil.sensors_temperatures()["coretemp"][0][1]', '°C', FALSE);
 
 
 -- Inserts 
@@ -441,7 +441,7 @@ CREATE VIEW vw_maquinasMaiorUsoCpu AS
 INSERT INTO metrica VALUES (1, 'CPU', 'Porcentagem de uso', 'cpuPercent', 'psutil.cpu_percent(interval=0.1)', '%', 0);
 INSERT INTO metrica VALUES (2, 'RAM', 'Porcentagem de uso', 'ramPercent', 'psutil.virtual_memory().percent', '%', 0);
 INSERT INTO metrica VALUES (3, 'DISCO', 'Porcentagem de uso', 'diskPercent', 'psutil.disk_usage("/").percent', '%', 0);
-INSERT INTO metrica VALUES (4, 'CPU', 'Temperatura', 'cpuTemp', 'psutil.sensors_temperatures()', '°C', 0);
+INSERT INTO metrica VALUES (4, 'CPU', 'Temperatura', 'cpuTemp', 'psutil.sensors_temperatures()["coretemp"][0][1]', '°C', 0);
 
 
 
