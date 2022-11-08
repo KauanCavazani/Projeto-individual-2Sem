@@ -317,7 +317,7 @@
         }
         console.log(resposta)
         myLineChart.destroy()
-        criarGrafico(metrica)
+        criarGraficoInicial(metrica)
         var dadosGrafico = [];
         var labelsGrafico = [];
 
@@ -347,31 +347,28 @@
             titulo_grafico_linha.innerHTML = 'TEMPERATURA DA CPU'
         }
         
-        setTimeout(() => {
-            obterDadosGrafico(idMaquina, metrica, false, idComponente);
-        }, tempoCapturaGrafico);
     }
 
 
-    function atualizarGrafico(metrica, resposta, idComponente) {
-        if(idAtualPlotar == idComponente) {
-            var dados = resposta[0]
-            var valorLido = dados.valorLido;
-            var unidadeMedida = dados.unidadeMedida;
-            var dataHorario = dados.horario.split("T");
-            dataHorario = [dataHorario[0].replace(/-/g, "/"), dataHorario[1].slice(0, 8)];
+    // function atualizarGrafico(metrica, resposta, idComponente) {
+    //     if(idAtualPlotar == idComponente) {
+    //         var dados = resposta[0]
+    //         var valorLido = dados.valorLido;
+    //         var unidadeMedida = dados.unidadeMedida;
+    //         var dataHorario = dados.horario.split("T");
+    //         dataHorario = [dataHorario[0].replace(/-/g, "/"), dataHorario[1].slice(0, 8)];
 
-            myLineChart.data.labels.shift();
-            myLineChart.data.datasets[0].data.shift();
-            myLineChart.data.labels.push(dataHorario);
-            myLineChart.data.datasets[0].data.push(valorLido);
-            myLineChart.update();
+    //         myLineChart.data.labels.shift();
+    //         myLineChart.data.datasets[0].data.shift();
+    //         myLineChart.data.labels.push(dataHorario);
+    //         myLineChart.data.datasets[0].data.push(valorLido);
+    //         myLineChart.update();
             
-            setTimeout(() => {
-                obterDadosGrafico(idMaquina, metrica, false, idComponente);
-            }, tempoCapturaGrafico);
-        }
-    }
+    //         setTimeout(() => {
+    //             obterDadosGrafico(idMaquina, metrica, false, idComponente);
+    //         }, tempoCapturaGrafico);
+    //     }
+    // }
 
     function listarTabelaAlertas(listaAlertas) {
         var bodyTable = document.getElementById('corpo-tabela-alertas');

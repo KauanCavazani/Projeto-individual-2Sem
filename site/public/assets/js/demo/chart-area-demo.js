@@ -122,3 +122,45 @@ function criarGrafico(metrica) {
     }
   });
 }
+
+function criarGraficoInicial(metrica){
+  myLineChart = new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels: [],
+      datasets: [{
+        label: "Média de uso",
+        lineTension: 0.3,
+        backgroundColor: "rgba(78, 115, 223, 0.5)",
+        borderColor: "rgba(78, 115, 223, 1)",
+        pointRadius: 3,
+        pointBackgroundColor: "rgba(78, 115, 223, 1)",
+        pointBorderColor: "rgba(78, 115, 223, 1)",
+        pointHoverRadius: 3,
+        pointHoverBackgroundColor: "rgba(78, 115, 223, 1)",
+        pointHoverBorderColor: "rgba(78, 115, 223, 1)",
+        pointHitRadius: 10,
+        pointBorderWidth: 2,
+        data: [],
+      }],
+    },
+    options: {
+        animation: false,
+        scales: {
+            x: {
+                type: 'time',
+                min: new Date('2019-01-01').valueOf(),
+                max: new Date('2019-12-31').valueOf()
+            },
+            y: {
+                type: 'linear',
+                min: 0,
+                max: 100      
+            }
+        }
+    }
+});
+
+myLineChart.width = 100;
+myLineChart.height = 100;
+}
