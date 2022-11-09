@@ -1,13 +1,13 @@
-idComponenteCPU <- amostraCPU$idComponente[1:390]
-macCPU <- amostraCPU$idServidor[1:390]
+idComponenteCPU <- amostraTemp$idComponente[1:390]
+macCPU <- amostraTemp$idServidor[1:390]
 horario <- datas$V1
-valorCPU <- amostraCPU$valorLido[1:390]
-unidadeMedidaCPU <- amostraCPU$unidadeMedida[1:390]
+valorCPU <- amostraTemp$valorLido[1:390]
+fkMetrica <- rep(4, 390)
 
-dadosCPU <- data.frame("idComponente"=c(idComponenteCPU),
+dadosTemp <- data.frame("fkMetrica"=c(fkMetrica),
+                      "idComponente"=c(idComponenteCPU),
                        "idServidor"=c(macCPU),
                        "horario"=c(horario),
-                       "valorLido"=c(valorCPU),
-                       "unidadeMedida"=c(unidadeMedidaCPU))
+                       "valorLido"=c(valorCPU))
 
-write.csv(dadosCPU,"~/Downloads/Projeto-individual-2Sem/dadosCPU.csv", row.names = FALSE)
+write.csv(dadosCPU,"~/Downloads/Projeto-individual-2Sem/dadosTemp.csv", row.names = FALSE)

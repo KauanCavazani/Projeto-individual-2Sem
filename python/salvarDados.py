@@ -1,14 +1,20 @@
 def main():
-    import pandas as pd
+    import csv
 
-    # bdsql, cursor = conectar()
+    bdsql, cursor = conectar()
 
-    with open("dadosCPU.csv", "r") as file:
-        file_csv = pd.read_csv(file, delimiter=";")
-        for i, row in enumerate(file_csv):
-            print(file_csv.loc[i])
-            # query = ("INSERT INTO leitura (fkMetrica, horario, valorLido, fkComponente_idComponente, fkComponente_fkSevidor) VALUES (%s, %s, %s, %s, %s);")
-            # val = ()                
+    with open("dadosTemp.csv") as file:
+        file_csv = csv.reader(file, delimiter=",")
+        count = 0
+        for row in file_csv:
+            if count != 0:
+                query = ("INSERT INTO leitura (fkMetrica, horario, valorLido, fkComponente_idComponente, fkComponente_fkServidor) VALUES (%s, %s, %s, %s, %s);")
+                val = (row[0], row[3], row[4], 2, row[2])
+
+                cursor.execute(query, val)
+                bdsql.commit()
+
+            count += 1
 
 def conectar():
     import mysql.connector
