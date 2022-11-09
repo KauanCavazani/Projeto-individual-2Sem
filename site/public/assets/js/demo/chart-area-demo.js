@@ -130,37 +130,49 @@ function criarGraficoInicial(metrica){
       labels: [],
       datasets: [{
         label: "Média de uso",
-        lineTension: 0.3,
         backgroundColor: "rgba(78, 115, 223, 0.5)",
         borderColor: "rgba(78, 115, 223, 1)",
-        pointRadius: 3,
+        pointRadius: 0,
         pointBackgroundColor: "rgba(78, 115, 223, 1)",
         pointBorderColor: "rgba(78, 115, 223, 1)",
         pointHoverRadius: 3,
         pointHoverBackgroundColor: "rgba(78, 115, 223, 1)",
         pointHoverBorderColor: "rgba(78, 115, 223, 1)",
         pointHitRadius: 10,
-        pointBorderWidth: 2,
+        pointBorderWidth: 0,
         data: [],
       }],
     },
     options: {
+        maintainAspectRatio: false,
+        layout: {
+          padding: {
+            left: 10,
+            right: 25,
+            top: 25,
+            bottom: 0
+          }
+        },
         animation: false,
         scales: {
             x: {
                 type: 'time',
-                min: new Date('2019-01-01').valueOf(),
-                max: new Date('2019-12-31').valueOf()
+                min: new Date('2022-10-01').valueOf(),
+                max: new Date('2022-10-31').valueOf()
             },
             y: {
                 type: 'linear',
                 min: 0,
-                max: 100      
+                max: 100,
+                gridLines: {
+                  color: "rgb(234, 236, 244)",
+                  zeroLineColor: "rgb(234, 236, 244)",
+                  drawBorder: false,
+                  borderDash: [1],
+                  zeroLineBorderDash: [2]
+                } 
             }
         }
     }
 });
-
-myLineChart.width = 100;
-myLineChart.height = 100;
 }

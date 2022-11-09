@@ -20,7 +20,7 @@ function medidasCardsTempoReal(idMaquina, metrica, limite) {
 
 function medidasGraficoTempoReal(idMaquina, metrica, limite, idComponente) {
     if (process.env.AMBIENTE_PROCESSO == "desenvolvimento") {
-        var instrucao = `SELECT * FROM vw_${metrica} WHERE idServidor = '${idMaquina}' AND idComponente = ${idComponente} LIMIT ${limite};`;
+        var instrucao = `SELECT * FROM vw_${metrica} WHERE idServidor = '${idMaquina}' AND idComponente = ${idComponente} AND horario >= '2022-10-01' AND horario <= '2022-10-31';`;
         console.log("Executando a instrução SQL: \n" + instrucao);
     } else if (process.env.AMBIENTE_PROCESSO == "producao") {
         var instrucao = `SELECT TOP ${limite} * FROM vw_${metrica} WHERE idServidor = '${idMaquina}' AND idComponente = ${idComponente};`;
