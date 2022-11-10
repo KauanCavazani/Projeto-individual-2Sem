@@ -144,3 +144,8 @@
     background-color: #d33;
     box-shadow: none !important;
 }
+
+.col-xl-8 {
+    flex: 0 0 auto;
+    width: 100%;
+}

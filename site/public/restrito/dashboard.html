@@ -235,12 +235,9 @@
     const tempoCapturaCards = 1000;
     var tempoCapturaGrafico = 1000;
 
-
     var pagina = "dashboard";
 
-
     setTimeout(() => {
-        console.log("Cheguei");
         criarTela();
         setTimeout(() => {
             iniciar();
@@ -279,7 +276,7 @@
 
         var spanStatus = `status_${idToSnakeCase}`
         spanStatus = document.getElementById(spanStatus)
-        console.log(spanStatus)
+        // console.log(spanStatus)
         
         var percent = dadosMaquina[0].valorLido;
 
@@ -311,22 +308,21 @@
 
     var idAtualPlotar = ''
 
-    function plotarGrafico(metrica, resposta, limite, idComponente) {
+    function plotarGrafico(metrica, resposta, idComponente, nomeMetrica) {
         if(idAtualPlotar != idComponente) {
             idAtualPlotar = idComponente
         }
-        console.log(resposta)
+
         myLineChart.destroy()
-        criarGraficoInicial(metrica)
+        criarGraficoInicial(resposta[0].unidadeMedida)
         var dadosGrafico = [];
         var labelsGrafico = [];
 
         for (var i = 0; i < resposta.length; i++) {
             var dados = resposta[i]
-            var valorLido = dados.valorLido;
+            var valorLido = dados.Media;
             var unidadeMedida = dados.unidadeMedida;
-            var dataHorario = dados.horario.split("T");
-            dataHorario = [dataHorario[0].replace(/-/g, "/"), dataHorario[1].slice(0, 8)];
+            var dataHorario = dados.Dia;
 
             dadosGrafico.push(valorLido)
             labelsGrafico.push(dataHorario)
@@ -337,15 +333,9 @@
         myLineChart.data.labels = labelsGrafico;
         myLineChart.update();
 
-        if (metrica == 'cpuPercent') {
-            titulo_grafico_linha.innerHTML = 'PORCENTAGEM DE USO DA CPU'
-        } else if (metrica == 'ramPercent') {
-            titulo_grafico_linha.innerHTML = 'PORCENTAGEM DE USO DA RAM'
-        } else if (metrica == 'diskPercent') {
-            titulo_grafico_linha.innerHTML = 'PORCENTAGEM DE USO DO DISCO'
-        } else if (metrica == 'cpuTemp') {
-            titulo_grafico_linha.innerHTML = 'TEMPERATURA DA CPU'
-        }
+
+        titulo_grafico_linha.innerHTML = 'MÉDIA POR DIA DA ' + nomeMetrica.toUpperCase()
+         
         
     }
 
