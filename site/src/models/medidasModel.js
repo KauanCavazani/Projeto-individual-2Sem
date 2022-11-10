@@ -18,9 +18,9 @@ function medidasCardsTempoReal(idMaquina, metrica, limite) {
     return database.executar(instrucao);
 }
 
-function medidasGraficoTempoReal(idMaquina, metrica, idComponente) {
+function medidasGraficoTempoReal(idMaquina, metrica, idComponente, idMetrica) {
     if (process.env.AMBIENTE_PROCESSO == "desenvolvimento") {
-        var instrucao = `SELECT * FROM vw_${metrica} WHERE idServidor = '${idMaquina}' AND idComponente = ${idComponente} AND Mes = '10';`;
+        var instrucao = `SELECT * FROM vw_${metrica} WHERE idServidor = '${idMaquina}' AND idComponente = ${idComponente} AND idMetrica = ${idMetrica} AND Mes = '10';`;
         console.log("Executando a instrução SQL: \n" + instrucao);
     } else if (process.env.AMBIENTE_PROCESSO == "producao") {
         var instrucao = `SELECT TOP ${limite} * FROM vw_${metrica} WHERE idServidor = '${idMaquina}' AND idComponente = ${idComponente};`;
