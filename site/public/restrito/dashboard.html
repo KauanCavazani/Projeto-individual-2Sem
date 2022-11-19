@@ -224,34 +224,47 @@
 
     var idAtualPlotar = ''
 
-    function plotarGrafico(metrica, resposta, idComponente, nomeMetrica, idMetrica, mes) {
+    function plotarGrafico(metrica, resposta, idComponente, nomeMetrica, idMetrica, mes, isSegundoEixo) {
         listarUltimosCincoMeses(metrica, idComponente, idMetrica, nomeMetrica, mes)
-        receberMetricas(idMetrica, idComponente)
+        receberMetricas(idMetrica, idComponente, nomeMetrica)
 
         if(idAtualPlotar != idComponente) {
             idAtualPlotar = idComponente
         }
 
-        myLineChart.destroy()
-        criarGraficoInicial(resposta[0].unidadeMedida)
         var dadosGrafico = [];
         var labelsGrafico = [];
+        var dados, valorLido
 
-        for (var i = 0; i < resposta.length; i++) {
-            var dados = resposta[i]
-            var valorLido = dados.Media;
-            var unidadeMedida = dados.unidadeMedida;
-            var dataHorario = dados.Dia;
+        if(isSegundoEixo) {
+            for (var i = 0; i < resposta.length; i++) {
+                dados = resposta[i]
+                valorLido = dados.Media;
 
-            dadosGrafico.push(valorLido)
-            labelsGrafico.push(dataHorario)
+                dadosGrafico.push(valorLido)
+            }
+            console.log('dados grafico', dadosGrafico)
+            myLineChart.data.datasets[1].data = dadosGrafico;
+        } else {
+            myLineChart.destroy()
+            criarGraficoInicial(resposta[0].unidadeMedida)
+
+            for (var i = 0; i < resposta.length; i++) {
+                dados = resposta[i]
+                valorLido = dados.Media;
+                var unidadeMedida = dados.unidadeMedida;
+                var dataHorario = dados.Dia;
+
+                dadosGrafico.push(valorLido)
+                labelsGrafico.push(dataHorario)
+            }
+
+
+            myLineChart.data.datasets[0].data = dadosGrafico;
+            myLineChart.data.labels = labelsGrafico;
         }
 
-
-        myLineChart.data.datasets[0].data = dadosGrafico;
-        myLineChart.data.labels = labelsGrafico;
         myLineChart.update();
-
 
         titulo_grafico_linha.innerHTML = 'MÉDIA POR DIA DA ' + nomeMetrica.toUpperCase()
         
@@ -295,7 +308,7 @@
         }
 
         areaSelectMes.innerHTML = `
-        <select class="dropdown-toggle btn btn-sm btn-select" id="selecionar-mes" onchange="obterDadosGrafico('${sessionStorage.MAC_SERVIDOR}', '${metrica}', ${idComponente}, '${nomeMetrica}', ${idMetrica}, null)">
+        <select class="dropdown-toggle btn btn-sm btn-select" id="selecionar-mes" onchange="obterDadosGrafico('${sessionStorage.MAC_SERVIDOR}', '${metrica}', ${idComponente}, '${nomeMetrica}', ${idMetrica}, null, false)">
             <option value="null">Selecionar o Mês</option>
         </select>
         `
@@ -327,11 +340,12 @@
         return datas;
     }
 
-    function listarMetricasDisponiveis(metricas) {
+    function listarMetricasDisponiveis(metricas, idComponente, idMetrica, nomeMetrica) {
+        console.log(nomeMetrica);
         const areaSelectMetrica = document.getElementById('area-select-metrica')
 
         areaSelectMetrica.innerHTML = `
-        <select class="dropdown-toggle btn btn-sm btn-select" id="selecionar-metrica">
+        <select class="dropdown-toggle btn btn-sm btn-select" id="selecionar-metrica" onchange="obterDadosGrafico('${sessionStorage.MAC_SERVIDOR}', 'mediaPorDia', ${idComponente}, '${nomeMetrica}', null, null, true)">
             <option value="null">Selecionar a Métrica</option>
         </select>
         `
@@ -340,7 +354,7 @@
 
         for(let i = 0; i < metricas.length; i++) {
             selectMetrica.innerHTML += `
-                <option value="${metricas[i].nomeView}">${metricas[i].nomeMetrica}</option>
+                <option value="${metricas[i].idMetrica}">${metricas[i].nomeMetrica}</option>
             `
         }
     }
