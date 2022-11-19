@@ -9,7 +9,7 @@ def main():
         for row in file_csv:
             if count != 0:
                 query = ("INSERT INTO leitura (fkMetrica, horario, valorLido, fkComponente_idComponente, fkComponente_fkServidor) VALUES (%s, %s, %s, %s, %s);")
-                val = (row[0], row[3], row[4], 1, row[2])
+                val = (row[0], row[3], row[4], 3, row[2])
 
                 cursor.execute(query, val)
                 bdsql.commit()
@@ -22,7 +22,7 @@ def main():
         for row in file_csv:
             if count != 0:
                 query = ("INSERT INTO leitura (fkMetrica, horario, valorLido, fkComponente_idComponente, fkComponente_fkServidor) VALUES (%s, %s, %s, %s, %s);")
-                val = (row[0], row[3], row[4], 1, row[2])
+                val = (row[0], row[3], row[4], 3, row[2])
 
                 cursor.execute(query, val)
                 bdsql.commit()
