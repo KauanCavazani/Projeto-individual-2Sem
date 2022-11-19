@@ -36,7 +36,7 @@ function criarCards(vtComponentes){
             icone = "fas fa-light fa-microchip fa-2x text-primary"
         }
 
-        cards.innerHTML += `<div onclick="obterDadosGrafico('${sessionStorage.MAC_SERVIDOR}', '${viewName}', ${componente.idComponente}, '${componente.nomeMetrica}', '${componente.idMetrica}')" class="col-xl-3 col-md-6 mb-4">
+        cards.innerHTML += `<div onclick="obterDadosGrafico('${sessionStorage.MAC_SERVIDOR}', '${viewName}', ${componente.idComponente}, '${componente.nomeMetrica}', '${componente.idMetrica}', '${new Date().getMonth()}')" class="col-xl-3 col-md-6 mb-4">
         <div class="card h-100">
             <div id="card_componentes" class="card-body">
                 <div class="row align-items-center">
@@ -85,8 +85,12 @@ function obterDadosCards(idMaquina, metrica) {
 }
 
 // Obtendo dados grafico
-function obterDadosGrafico(idMaquina, metrica, idComponente, nomeMetrica, idMetrica) {    
-    fetch(`/medidas/grafico-tempo-real/${idMaquina}/${metrica}/${idComponente}/${idMetrica}`)
+function obterDadosGrafico(idMaquina, metrica, idComponente, nomeMetrica, idMetrica, mes) {    
+    if(mes == null) {
+        mes = document.getElementById('selecionar-mes').value;
+    }
+    console.log(mes)
+    fetch(`/medidas/grafico-tempo-real/${idMaquina}/${metrica}/${idComponente}/${idMetrica}/${mes}`)
         .then(response => {
             if (response.ok) {
                 response.json().then(resposta => {
@@ -95,7 +99,7 @@ function obterDadosGrafico(idMaquina, metrica, idComponente, nomeMetrica, idMetr
                     // console.log(typeof resposta)
                     // console.log(resposta)
                     
-                    plotarGrafico(metrica, resposta, idComponente, nomeMetrica)
+                    plotarGrafico(metrica, resposta, idComponente, nomeMetrica, idMetrica, mes)
                 });
             } else {
 

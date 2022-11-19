@@ -8,7 +8,7 @@ router.get("/cards-tempo-real/:idMaquina/:metrica", function (req, res) {
     medidasController.medidasCardsTempoReal(req, res);
 })
 
-router.get("/grafico-tempo-real/:idMaquina/:metrica/:idComponente/:idMetrica", function (req, res) {
+router.get("/grafico-tempo-real/:idMaquina/:metrica/:idComponente/:idMetrica/:mes", function (req, res) {
     medidasController.medidasGraficoTempoReal(req, res);
 })
 
