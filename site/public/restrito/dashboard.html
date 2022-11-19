@@ -54,12 +54,8 @@
                                             class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
                                             <h6 id="titulo_grafico_linha" class="m-0 font-weight-bold text-primary"></h6>
                                             <div>
-                                                <span id="area-select-mes">
-
-                                                </span>
-                                                <select class="dropdown-toggle btn btn-sm btn-select" id="selecionar-metrica">
-                                                    <option value="null">Selecionar a Métrica</option>
-                                                </select>
+                                                <span id="area-select-mes"></span>
+                                                <span id="area-select-metrica"></span>
                                             </div>
                                         </div>
                                         <div class="card-body">
@@ -230,6 +226,7 @@
 
     function plotarGrafico(metrica, resposta, idComponente, nomeMetrica, idMetrica, mes) {
         listarUltimosCincoMeses(metrica, idComponente, idMetrica, nomeMetrica, mes)
+        receberMetricas(idMetrica, idComponente)
 
         if(idAtualPlotar != idComponente) {
             idAtualPlotar = idComponente
@@ -328,6 +325,24 @@
         }
 
         return datas;
+    }
+
+    function listarMetricasDisponiveis(metricas) {
+        const areaSelectMetrica = document.getElementById('area-select-metrica')
+
+        areaSelectMetrica.innerHTML = `
+        <select class="dropdown-toggle btn btn-sm btn-select" id="selecionar-metrica">
+            <option value="null">Selecionar a Métrica</option>
+        </select>
+        `
+
+        const selectMetrica = document.getElementById('selecionar-metrica');
+
+        for(let i = 0; i < metricas.length; i++) {
+            selectMetrica.innerHTML += `
+                <option value="${metricas[i].nomeView}">${metricas[i].nomeMetrica}</option>
+            `
+        }
     }
 
     var btnGerenciarComponentes = document.getElementById('btn-gerenciarComponentes')

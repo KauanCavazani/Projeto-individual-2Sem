@@ -204,6 +204,12 @@ FROM (
 ) a
 ORDER BY a.Ano, a.Mes, a.Dia;
 
+CREATE VIEW vw_getOptMetricas AS
+SELECT idComponente, nomeMetrica, nomeView, fkServidor
+FROM metrica
+JOIN parametro ON fkMetrica = idMetrica
+JOIN componente ON idComponente = fkComponente_idComponente;
+
 -- cardápio
 INSERT INTO metrica (idMetrica, nomeComponente, nomeMetrica, nomeView, comando, unidadeMedida, isTupla) VALUES 
 (1, 'CPU', 'Porcentagem de uso', 'cpuPercent', 'psutil.cpu_percent(interval=0.1)', '%', FALSE);

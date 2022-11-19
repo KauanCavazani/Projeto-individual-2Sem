@@ -131,14 +131,14 @@ function criarGraficoInicial(unidadeMedida){
       datasets: [{
         label: "Média de uso",
         lineTension: 0.3,
-        backgroundColor: "rgba(78, 115, 223, 0.5)",
-        borderColor: "rgba(78, 115, 223, 1)",
+        fill: false,
+        borderColor: "#4E73DF",
         pointRadius: 3,
-        pointBackgroundColor: "rgba(78, 115, 223, 1)",
-        pointBorderColor: "rgba(78, 115, 223, 1)",
+        pointBackgroundColor: "#4E73DF",
+        pointBorderColor: "#4E73DF",
         pointHoverRadius: 3,
-        pointHoverBackgroundColor: "rgba(78, 115, 223, 1)",
-        pointHoverBorderColor: "rgba(78, 115, 223, 1)",
+        pointHoverBackgroundColor: "#4E73DF",
+        pointHoverBorderColor: "#4E73DF",
         pointHitRadius: 10,
         pointBorderWidth: 2,
         data: [],
@@ -179,8 +179,8 @@ function criarGraficoInicial(unidadeMedida){
           suggestedMax: 100
           },
           gridLines: {
-            color: "rgb(234, 236, 244)",
-            zeroLineColor: "rgb(234, 236, 244)",
+            color: "#EAECF4",
+            zeroLineColor: "#EAECF4",
             drawBorder: false,
             borderDash: [2],
             zeroLineBorderDash: [2]
@@ -191,7 +191,7 @@ function criarGraficoInicial(unidadeMedida){
         display: false
       },
       tooltips: {
-        backgroundColor: "rgb(255,255,255)",
+        backgroundColor: "#FFFFFF",
         bodyFontColor: "#858796",
         titleMarginBottom: 10,
         titleFontColor: '#6e707e',

@@ -89,7 +89,7 @@ function obterDadosGrafico(idMaquina, metrica, idComponente, nomeMetrica, idMetr
     if(mes == null) {
         mes = document.getElementById('selecionar-mes').value;
     }
-    console.log(mes)
+    console.log(idMaquina, metrica, idComponente, nomeMetrica, idMetrica, mes)
     fetch(`/medidas/grafico-tempo-real/${idMaquina}/${metrica}/${idComponente}/${idMetrica}/${mes}`)
         .then(response => {
             if (response.ok) {
@@ -97,17 +97,37 @@ function obterDadosGrafico(idMaquina, metrica, idComponente, nomeMetrica, idMetr
 
                     // console.log(`Dados recebidos Gráfico: ${JSON.stringify(resposta)}`);
                     // console.log(typeof resposta)
-                    // console.log(resposta)
+                    console.log(resposta)
                     
                     plotarGrafico(metrica, resposta, idComponente, nomeMetrica, idMetrica, mes)
                 });
             } else {
-
                 console.error('Nenhum dado encontrado ou erro na API');
             }
         })
         .catch(function (error) {
-            console.error(`Erro na obtenção dos dados do aquario p/ gráfico: ${error.message}`);
+            console.error(`Erro na obtenção dos dados p/ gráfico: ${error.message}`);
+        });
+
+}
+
+function receberMetricas(idMetricaAtual, idComponente) {
+
+    fetch(`/metricas/${sessionStorage.MAC_SERVIDOR}/${idComponente}/${idMetricaAtual}`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        }
+    }).then(response => {
+            if(response.ok) {
+                response.json().then(resposta => {
+                    listarMetricasDisponiveis(resposta)
+                })
+            } else {
+                console.error('Nenhum dado encontrado ou erro na API');
+            }
+        }).catch(function(error) {
+            console.error(`Erro na obtenção das métricas: ${error.message}`);
         });
 
 }
