@@ -205,7 +205,7 @@ FROM (
 ORDER BY a.Ano, a.Mes, a.Dia;
 
 CREATE VIEW vw_getOptMetricas AS
-SELECT idComponente, nomeMetrica, nomeView, fkServidor
+SELECT idComponente, nomeMetrica, nomeView, fkServidor, idMetrica
 FROM metrica
 JOIN parametro ON fkMetrica = idMetrica
 JOIN componente ON idComponente = fkComponente_idComponente;
