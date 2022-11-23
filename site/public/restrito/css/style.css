@@ -159,3 +159,13 @@
 #section-dashboard .col-xl-8 {
     width: 49%;
 }
+
+.area-estatisticas {
+    width: 50%;
+    display: flex;
+    justify-content: space-between;
+}
+
+.area-estatisticas .card-estatistica {
+    width: 49%;
+}
