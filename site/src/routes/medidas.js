@@ -16,4 +16,8 @@ router.get("/getComponentesServidor/:idMaquina", function (req, res) {
     medidasController.getComponentesServidor(req, res);
 })
 
+router.get("/getDadosAnalytics/:idTorre/:idServidor/:idComponente/:idMetrica/:mes", function (req, res) {
+    medidasController.getDadosAnalytics(req, res);
+})
+
 module.exports = router;

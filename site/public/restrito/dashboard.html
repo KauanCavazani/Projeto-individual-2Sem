@@ -103,10 +103,10 @@
                                             <div class="card-body d-flex flex-column justify-content-end">
                                                 <div class="row justify-content-between">
                                                     <div class="col-auto align-self-end">
-                                                        <div class="fs-4 fw-normal text-700 lh-1 mb-1">0%</div>
-                                                        <span class="badge rounded-pill fs--2 bg-200 text-primary">
-                                                            <span class="fas fa-caret-up me-1"></span>
-                                                            0%
+                                                        <div id="span-mediaMes" class="fs-4 fw-normal text-700 lh-1 mb-1">0%</div>
+                                                        <span id="span-badgeMediaMes" class="badge">
+                                                            <span id="icon-mediaMes" class=""></span>
+                                                            <span id="span-mediaMesEstatistica">0%</span> 
                                                         </span>
                                                     </div>
                                                     <div class="col-auto ps-0 mt-n4"></div>
@@ -122,7 +122,7 @@
                                             <div class="card-body d-flex flex-column justify-content-end">
                                                 <div class="row justify-content-between">
                                                     <div class="col-auto align-self-end">
-                                                        <div class="fs-4 fw-normal text-700 lh-1 mb-1">0</div>
+                                                        <div id="span-qtdMetricas" class="fs-4 fw-normal text-700 lh-1 mb-1">0</div>
                                                         <span class="fs--2 bg-200 text-primary">
                                                             métrica(s)
                                                         </span>
@@ -159,9 +159,9 @@
                                             <div class="card-body d-flex flex-column justify-content-end">
                                                 <div class="row justify-content-between">
                                                     <div class="col-auto align-self-end">
-                                                        <div class="fs-4 fw-normal text-700 lh-1 mb-1">Bom estado</div>
-                                                        <span class="badge rounded-pill fs--2 bg-200 text-primary">
-                                                            <i class="fa-sharp fa-solid fa-check"></i>
+                                                        <div id="span-status" class="fs-4 fw-normal text-700 lh-1 mb-1">Bom estado</div>
+                                                        <span id="icon-status" class="badge">
+                                                            
                                                         </span>
                                                     </div>
                                                     <div class="col-auto ps-0 mt-n4"></div>
@@ -422,6 +422,56 @@
                 <option value="${metricas[i].idMetrica}">${metricas[i].nomeMetrica}</option>
             `
         }
+    }
+
+    function exibirDadosAnalytics(res) {
+
+        var spanMediaMes = document.getElementById('span-mediaMes')
+        var spanQtdMetricas = document.getElementById('span-qtdMetricas')
+        var spanMediaMesEstatistica = document.getElementById('span-mediaMesEstatistica')
+        var iconMediaMes = document.getElementById('icon-mediaMes')
+        var spanBadgeMediaMes = document.getElementById('span-badgeMediaMes')
+        var spanStatus = document.getElementById('span-status')
+        var iconStatus = document.getElementById('icon-status')
+
+        var mediaUso = parseFloat(res[0].media);
+        var diferencaMediaMes = mediaUso - parseFloat(res[1].media)
+
+        diferencaMediaMes = diferencaMediaMes.toFixed(0) == 0 ? 0 : diferencaMediaMes;
+
+        var classeAtualMediaMes = "";
+
+        if(diferencaMediaMes > 0) {
+            spanBadgeMediaMes.style.color = '#d33'
+            iconMediaMes.className = "fa fa-caret-up me-1"
+            classeAtualMediaMes = "fa fa-caret-up me-1";
+        } 
+        
+        if(diferencaMediaMes == 0) {
+            spanBadgeMediaMes.style.color = '#5A5C69'
+            iconMediaMes.className = "fa-solid fa-minus me-1"
+            classeAtualMediaMes = "fa-solid fa-minus me-1";
+        }
+
+        if(diferencaMediaMes < 0) {
+            spanBadgeMediaMes.style.color = '#0d6efd'
+            iconMediaMes.className = "fa fa-caret-down me-1"
+            classeAtualMediaMes = "fa fa-caret-down me-1";
+        }
+
+        if(mediaUso > 75) {
+            iconStatus.style.color = '#d33';
+            spanStatus.innerText = "Mau estado";
+            iconStatus.innerHTML = '<i class="fa-solid fa-xmark"></i>'
+        } else {
+            iconStatus.style.color = '#0d6efd';
+            spanStatus.innerText = "Bom estado";
+            iconStatus.innerHTML = '<i class="fa-sharp fa-solid fa-check"></i>'
+        }
+
+        spanMediaMes.innerText = mediaUso.toFixed(0) + res[0].unidadeMedida;
+        spanMediaMesEstatistica.innerText = diferencaMediaMes.toFixed(0) + res[0].unidadeMedida;
+        spanQtdMetricas.innerText = res[0].qtdMetricas;
     }
 
     var btnGerenciarComponentes = document.getElementById('btn-gerenciarComponentes')

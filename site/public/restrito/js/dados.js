@@ -99,6 +99,7 @@ function obterDadosGrafico(idMaquina, metrica, idComponente, nomeMetrica, idMetr
                     console.log(resposta)
                     
                     plotarGrafico(metrica, resposta, idComponente, nomeMetrica, idMetrica, mes, isSegundoEixo)
+                    obterDadosAnalytics(idComponente, idMetrica, mes)
                 });
             } else {
                 console.error('Nenhum dado encontrado ou erro na API');
@@ -128,7 +129,21 @@ function receberMetricas(idMetricaAtual, idComponente, nomeMetrica) {
         }).catch(function(error) {
             console.error(`Erro na obtenção das métricas: ${error.message}`);
         });
+}
 
+function obterDadosAnalytics(idComponente, idMetrica, mes) {
+    fetch(`/medidas/getDadosAnalytics/${sessionStorage.ID_TORRE}/${sessionStorage.MAC_SERVIDOR}/${idComponente}/${idMetrica}/${mes}`)
+        .then(response => {
+            if(response.ok) {
+                response.json().then(res => {
+                    exibirDadosAnalytics(res)
+                })
+            } else {
+                console.error('Nenhum dado encontrado ou erro na API');
+            }
+        }).catch(function(error) {
+            console.error(`Erro na obtenção das métricas: ${error.message}`);
+        })
 }
 
 function tratarId(metrica){

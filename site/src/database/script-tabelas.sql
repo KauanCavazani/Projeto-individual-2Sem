@@ -210,6 +210,35 @@ FROM metrica
 JOIN parametro ON fkMetrica = idMetrica
 JOIN componente ON idComponente = fkComponente_idComponente;
 
+CREATE VIEW vw_dadosAnalytics AS
+SELECT 
+	t.idTorre AS idTorre,
+	fkComponente_fkServidor AS idServidor,
+	fkComponente_idComponente AS idComponente,
+	fkMetrica,
+	MONTH(l.horario) AS mes,
+	AVG(l.valorLido) AS media,
+	unidadeMedida,
+	(SELECT 
+		COUNT(idComponente) 
+	FROM 
+		metrica
+	JOIN 
+		parametro ON fkMetrica = idMetrica
+	JOIN 
+		componente ON idComponente = fkComponente_idComponente
+	) AS qtdMetricas
+FROM 
+	leitura l
+JOIN
+	servidor s ON s.idServidor = l.fkComponente_fkServidor 
+JOIN 
+	torre t ON t.idTorre = s.fkTorre 
+JOIN 
+	metrica m ON m.idMetrica = l.fkMetrica
+GROUP BY
+	mes, idServidor, idComponente, idTorre, fkMetrica;
+	
 -- cardápio
 INSERT INTO metrica (idMetrica, nomeComponente, nomeMetrica, nomeView, comando, unidadeMedida, isTupla) VALUES 
 (1, 'CPU', 'Porcentagem de uso', 'cpuPercent', 'psutil.cpu_percent(interval=0.1)', '%', FALSE);

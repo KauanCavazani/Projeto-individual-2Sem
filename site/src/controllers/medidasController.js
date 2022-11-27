@@ -69,11 +69,49 @@ function medidasGraficoTempoReal(req, res) {
             } else {
                 res.status(204).send("Nenhum resultado encontrado!")
             }
-        }).catch(function (erro) {
-            console.log(erro);
-            console.log("\nHouve um erro ao coletar as medidas! Erro: ", erro.sqlMessage);
-            res.status(500).json(erro.sqlMessage);
+        }).catch(function (error) {
+            console.log(error);
+            console.log("\nHouve um erro ao coletar as medidas! Erro: ", error.sqlMessage);
+            res.status(500).json(error.sqlMessage);
         });
+    }
+}
+
+function getDadosAnalytics(req, res) {
+    var idServidor = req.params.idServidor;
+    var idTorre = req.params.idTorre;
+    var idComponente = req.params.idComponente;
+    var mesAtual = req.params.mes;
+    var mesAnterior = mesAtual - 1;
+    var idMetrica = req.params.idMetrica;
+
+
+    if(idServidor == null || idServidor == undefined) {
+        res.status(400).send("O idServidor está undefined");
+    } else if(idTorre == null || idTorre == undefined) {
+        res.status(400).send("O idTore está undefined");
+    } else if(idComponente == null || idComponente == undefined) {
+        res.status(400).send("O idComponente está undefined");
+    } else if(mesAtual == null || mesAtual == undefined) {
+        res.status(400).send("O mesAtual está undefined");
+    } else if(mesAnterior == null || mesAnterior == undefined) {
+        res.status(400).send("O mesAnterior está undefined");
+    } else if(idMetrica == null || idMetrica == undefined) {
+        res.status(400).send("O idMetrica está undefined");
+    } else {
+        medidasModel.getDadosAnalytics(idTorre, idServidor, idComponente, mesAtual, mesAnterior, idMetrica)
+            .then(function (response) {
+                if(response.length > 0) {
+                    console.log(response)
+                    res.status(200).json(response)
+                } else {
+                    res.status(204).send("Nenhum resultado encontrado!")
+                }
+            }).catch(function(error) {
+                console.log(error);
+                console.log("\nHouve um erro ao coletar os dados! Erro: ", error.sqlMessage);
+                res.status(500).json(error.sqlMessage)
+            })
     }
 }
 
@@ -81,5 +119,6 @@ function medidasGraficoTempoReal(req, res) {
 module.exports = {
     getComponentesServidor,
     medidasCardsTempoReal,
-    medidasGraficoTempoReal
+    medidasGraficoTempoReal,
+    getDadosAnalytics
 }
