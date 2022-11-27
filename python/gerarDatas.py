@@ -1,10 +1,8 @@
 import pandas as pd
 import csv
 
-
-
-dRan = pd.date_range(start ='2022-10-01 00:00:00', 
-       end ='2022-10-31 23:59:59', periods = 390)   
+dRan = pd.date_range(start ='2022-07-01 00:00:00', 
+       end ='2022-09-30 23:59:59', periods = 1170)   
 
 res = dRan.strftime('%Y-%m-%d %H:%M:%S')
 
