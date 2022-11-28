@@ -1,4 +1,6 @@
-var medidasModel = require("../models/medidasModel");
+const medidasModel = require("../models/medidasModel");
+const rls = require('ml-regression-multivariate-linear')
+
 
 function getComponentesServidor(req, res) {
     var idMaquina = req.params.idMaquina
@@ -115,10 +117,63 @@ function getDadosAnalytics(req, res) {
     }
 }
 
+function getPredict(req, res) {
+    var idServidor = req.params.idServidor;
+    var idTorre = req.params.idTorre;
+    var idComponente = req.params.idComponente;
+    var mesAtual = parseInt(req.params.mes) + 1;
+    var idMetrica = req.params.idMetrica;
+
+    console.log(mesAtual)
+
+    if(idServidor == null || idServidor == undefined) {
+        res.status(400).send("O idServidor está undefined");
+    } else if(idTorre == null || idTorre == undefined) {
+        res.status(400).send("O idTore está undefined");
+    } else if(idComponente == null || idComponente == undefined) {
+        res.status(400).send("O idComponente está undefined");
+    } else if(mesAtual == null || mesAtual == undefined) {
+        res.status(400).send("O mesAtual está undefined");
+    } else if(idMetrica == null || idMetrica == undefined) {
+        res.status(400).send("O idMetrica está undefined");
+    } else {
+        medidasModel.getTodasAsMediasPorMes(idTorre, idServidor, idComponente, idMetrica, mesAtual)
+            .then(function (response) {
+                if(response.length > 0) {
+
+                    console.log(response)
+
+                    var dados = []
+                    var meses = []
+                    
+                    for(var i = 0; i < response.length; i++){
+                        var dadoAtual = parseFloat(response[i].media);
+                        dados.push([dadoAtual]);
+                        meses.push([i])
+                    };            
+                    
+                    console.log(dados, meses)
+
+                    const regressao = new rls(meses, dados)
+
+                    res.status(200).json(regressao.predict([4]));                
+                } else {
+                    res.status(204).send("Nenhum resultado encontrado!")
+                }
+            }).catch(function(error) {
+                console.log(error);
+                console.log("\nHouve um erro ao coletar os dados! Erro: ", error.sqlMessage);
+                res.status(500).json(error.sqlMessage)
+            })
+    }
+
+}
+
 
 module.exports = {
     getComponentesServidor,
     medidasCardsTempoReal,
     medidasGraficoTempoReal,
-    getDadosAnalytics
+    getDadosAnalytics,
+    getPredict
 }

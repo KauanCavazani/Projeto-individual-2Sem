@@ -170,6 +170,18 @@
     width: 49%;
 }
 
-/* #span-badgeMediaMes {
-    color: #000 !important
-} */
+#section-analytics {
+    display: none;
+}
+
+#section-choose {
+    height: 60vh
+}
+
+#titulo-choose {
+    margin: 0 auto;
+}
+
+#titulo-macAdress {
+    cursor: pointer;
+}

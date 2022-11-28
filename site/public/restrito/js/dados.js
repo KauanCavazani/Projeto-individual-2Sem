@@ -99,7 +99,7 @@ function obterDadosGrafico(idMaquina, metrica, idComponente, nomeMetrica, idMetr
                     console.log(resposta)
                     
                     plotarGrafico(metrica, resposta, idComponente, nomeMetrica, idMetrica, mes, isSegundoEixo)
-                    obterDadosAnalytics(idComponente, idMetrica, mes)
+                    if(!isSegundoEixo) { obterDadosAnalytics(idComponente, idMetrica, mes) }
                 });
             } else {
                 console.error('Nenhum dado encontrado ou erro na API');
@@ -136,7 +136,7 @@ function obterDadosAnalytics(idComponente, idMetrica, mes) {
         .then(response => {
             if(response.ok) {
                 response.json().then(res => {
-                    exibirDadosAnalytics(res)
+                    exibirDadosAnalytics(res, idComponente, idMetrica, mes)
                 })
             } else {
                 console.error('Nenhum dado encontrado ou erro na API');
@@ -144,6 +144,18 @@ function obterDadosAnalytics(idComponente, idMetrica, mes) {
         }).catch(function(error) {
             console.error(`Erro na obtenção das métricas: ${error.message}`);
         })
+}
+
+async function preverDadosProximoMes(idComponente, idMetrica, mes) {
+
+    const response = await fetch(`/medidas/predict/${sessionStorage.ID_TORRE}&${sessionStorage.MAC_SERVIDOR}&${idComponente}&${idMetrica}&${mes}`)
+        .then((res) => res.json())
+
+    // const resConvert = await response.json()
+
+    return response[0];
+        
+
 }
 
 function tratarId(metrica){

@@ -20,4 +20,8 @@ router.get("/getDadosAnalytics/:idTorre/:idServidor/:idComponente/:idMetrica/:me
     medidasController.getDadosAnalytics(req, res);
 })
 
+router.get("/predict/:idTorre&:idServidor&:idComponente&:idMetrica&:mes", function (req, res) {
+    medidasController.getPredict(req, res);
+})
+
 module.exports = router;
