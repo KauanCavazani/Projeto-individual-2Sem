@@ -246,10 +246,10 @@
 
     function iniciar() {
         // Funções em ./js/dados.js
-        // obterDadosCards(idMaquina, 'cpuPercent');
+        obterDadosCards(idMaquina, 'cpuPercent');
         // obterDadosCards(idMaquina, 'ramPercent');
         // obterDadosCards(idMaquina, 'diskPercent');
-        // obterDadosCards(idMaquina, 'cpuTemp');
+        obterDadosCards(idMaquina, 'cpuTemp');
     }
 
     // Pegando dados de porcentagem para os cards no topo da tela
@@ -293,12 +293,13 @@
 
     var idAtualPlotar = ''
 
-    function plotarGrafico(metrica, resposta, idComponente, nomeMetrica, idMetrica, mes, isSegundoEixo) {
+    function plotarGrafico(metrica, resposta, idComponente, nomeMetrica, idMetrica, mes, tipoComponente, isSegundoEixo) {
+        sessionStorage.NOME_METRICA = nomeMetrica
         document.getElementById('section-choose').style.display = 'none';
         document.getElementById('section-analytics').style.display = 'block';
 
-        listarUltimosCincoMeses(metrica, idComponente, idMetrica, nomeMetrica, mes, isSegundoEixo)
-        receberMetricas(idMetrica, idComponente, nomeMetrica)
+        listarUltimosCincoMeses(metrica, idComponente, idMetrica, nomeMetrica, mes, tipoComponente, isSegundoEixo)
+        receberMetricas(idMetrica, idComponente, nomeMetrica, tipoComponente)
 
         if(idAtualPlotar != idComponente) {
             idAtualPlotar = idComponente
@@ -315,7 +316,6 @@
 
                 dadosGrafico.push(valorLido)
             }
-            console.log('dados grafico', dadosGrafico)
             myLineChart.data.datasets[1].data = dadosGrafico;
         } else {
             myLineChart.destroy()
@@ -329,8 +329,9 @@
 
                 dadosGrafico.push(valorLido)
                 labelsGrafico.push(dataHorario)
-            }
 
+                sessionStorage.DADOS_GRAFICO = JSON.stringify(resposta);
+            }
 
             myLineChart.data.datasets[0].data = dadosGrafico;
             myLineChart.data.labels = labelsGrafico;
@@ -368,7 +369,7 @@
     
     var idMetricaAtual;
 
-    function listarUltimosCincoMeses(metrica, idComponente, idMetrica, nomeMetrica, mes, isSegundoEixo) {
+    function listarUltimosCincoMeses(metrica, idComponente, idMetrica, nomeMetrica, mes, tipoComponente, isSegundoEixo) {
         const hoje = new Date();
         const mesesLabel = [];
         var datas = dataNosUltimosCincoMeses(hoje)
@@ -382,7 +383,7 @@
         idMetricaAtual = isSegundoEixo ? idMetricaAtual : idMetrica
 
         areaSelectMes.innerHTML = `
-        <select class="dropdown-toggle btn btn-sm btn-select" id="selecionar-mes" onchange="obterDadosGrafico('${sessionStorage.MAC_SERVIDOR}', '${metrica}', ${idComponente}, '${nomeMetrica}', ${idMetricaAtual}, null, false)">
+        <select class="dropdown-toggle btn btn-sm btn-select" id="selecionar-mes" onchange="obterDadosGrafico('${sessionStorage.MAC_SERVIDOR}', '${metrica}', ${idComponente}, '${nomeMetrica}', ${idMetricaAtual}, null, ${tipoComponente}, false)">
             <option value="null">Selecionar o Mês</option>
         </select>
         `
@@ -414,12 +415,12 @@
         return datas;
     }
 
-    function listarMetricasDisponiveis(metricas, idComponente, idMetrica, nomeMetrica) {
+    function listarMetricasDisponiveis(metricas, idComponente, idMetrica, nomeMetrica, tipoComponente) {
         console.log(nomeMetrica);
         const areaSelectMetrica = document.getElementById('area-select-metrica')
 
         areaSelectMetrica.innerHTML = `
-        <select class="dropdown-toggle btn btn-sm btn-select" id="selecionar-metrica" onchange="obterDadosGrafico('${sessionStorage.MAC_SERVIDOR}', 'mediaPorDia', ${idComponente}, '${nomeMetrica}', null, null, true)">
+        <select class="dropdown-toggle btn btn-sm btn-select" id="selecionar-metrica" onchange="obterDadosGrafico('${sessionStorage.MAC_SERVIDOR}', 'mediaPorDia', ${idComponente}, '${nomeMetrica}', null, null, ${tipoComponente}, true)">
             <option value="null">Selecionar a Métrica</option>
         </select>
         `
@@ -450,8 +451,10 @@
 
         spanProxMes.innerText = meses[parseInt(mes)]
 
-        var mediaUso = parseFloat(res[0].media);
-        var diferencaMediaMes = mediaUso - parseFloat(res[1].media)
+        console.log(res)
+
+        var mediaUso = parseFloat(res[1].media);        
+        var diferencaMediaMes = mediaUso - parseFloat(res[0].media)
 
         diferencaMediaMes = diferencaMediaMes.toFixed(0) == 0 ? 0 : diferencaMediaMes;
 
@@ -491,7 +494,7 @@
 
 
         if(parseInt(mes) == new Date().getMonth()) {
-
+        
             document.getElementById('card-previsao').style.display = 'block';
 
             var previsao = await preverDadosProximoMes(idComponente, idMetrica, mes)
@@ -533,6 +536,7 @@
 
     var tituloMacAdress = document.getElementById('titulo-macAdress')
     var btnGerenciarComponentes = document.getElementById('btn-gerenciarComponentes')
+    var btnGerarRelatorio = document.getElementById('btn-gerarRelatorio')
 
     btnGerenciarComponentes.addEventListener('click', () => {
         window.location = './componentes.html'
@@ -542,6 +546,10 @@
         console.log('click');
         document.getElementById('section-analytics').style.display = 'none';
         document.getElementById('section-choose').style.display = 'flex';
+    })
+
+    btnGerarRelatorio.addEventListener('click', () => {
+        window.open('./relatorio.html')
     })
 
 </script>

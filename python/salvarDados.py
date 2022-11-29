@@ -3,26 +3,26 @@ def main():
 
     bdsql, cursor = conectar()
 
-    with open("dadosTemp2.csv") as file:
+    with open("dadosTemp.csv") as file:
         file_csv = csv.reader(file, delimiter=",")
         count = 0
         for row in file_csv:
             if count != 0:
                 query = ("INSERT INTO leitura (fkMetrica, horario, valorLido, fkComponente_idComponente, fkComponente_fkServidor) VALUES (%s, %s, %s, %s, %s);")
-                val = (4, row[1], row[2], 3, row[0])
+                val = (4, row[1], row[2], 1, row[0])
 
                 cursor.execute(query, val)
                 bdsql.commit()
 
             count += 1
 
-    with open("dadosCPU2.csv") as file:
+    with open("dadosCPU.csv") as file:
         file_csv = csv.reader(file, delimiter=",")
         count = 0
         for row in file_csv:
             if count != 0:
                 query = ("INSERT INTO leitura (fkMetrica, horario, valorLido, fkComponente_idComponente, fkComponente_fkServidor) VALUES (%s, %s, %s, %s, %s);")
-                val = (1, row[1], row[2], 3, row[0])
+                val = (1, row[1], row[2], 1, row[0])
 
                 cursor.execute(query, val)
                 bdsql.commit()

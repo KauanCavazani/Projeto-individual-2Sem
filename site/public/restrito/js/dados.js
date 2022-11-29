@@ -36,7 +36,7 @@ function criarCards(vtComponentes){
             icone = "fas fa-light fa-microchip fa-2x text-primary"
         }
 
-        cards.innerHTML += `<div onclick="obterDadosGrafico('${sessionStorage.MAC_SERVIDOR}', '${viewName}', ${componente.idComponente}, '${componente.nomeMetrica}', '${componente.idMetrica}', '${new Date().getMonth()}', false)" class="col-xl-3 col-md-6 mb-4">
+        cards.innerHTML += `<div onclick="obterDadosGrafico('${sessionStorage.MAC_SERVIDOR}', '${viewName}', ${componente.idComponente}, '${componente.nomeMetrica}', '${componente.idMetrica}', '${new Date().getMonth()}', '${componente.tipoComponente}', false)" class="col-xl-3 col-md-6 mb-4">
         <div class="card h-100">
             <div id="card_componentes" class="card-body">
                 <div class="row align-items-center">
@@ -85,7 +85,7 @@ function obterDadosCards(idMaquina, metrica) {
 }
 
 // Obtendo dados grafico
-function obterDadosGrafico(idMaquina, metrica, idComponente, nomeMetrica, idMetrica, mes, isSegundoEixo) {    
+function obterDadosGrafico(idMaquina, metrica, idComponente, nomeMetrica, idMetrica, mes, tipoComponente, isSegundoEixo) {    
     if(mes == null) { mes = document.getElementById('selecionar-mes').value }
     if(idMetrica == null) { idMetrica = document.getElementById('selecionar-metrica').value; }
     console.log(idMaquina, metrica, idComponente, nomeMetrica, idMetrica, mes)
@@ -98,7 +98,7 @@ function obterDadosGrafico(idMaquina, metrica, idComponente, nomeMetrica, idMetr
                     // console.log(typeof resposta)
                     console.log(resposta)
                     
-                    plotarGrafico(metrica, resposta, idComponente, nomeMetrica, idMetrica, mes, isSegundoEixo)
+                    plotarGrafico(metrica, resposta, idComponente, nomeMetrica, idMetrica, mes, tipoComponente, isSegundoEixo)
                     if(!isSegundoEixo) { obterDadosAnalytics(idComponente, idMetrica, mes) }
                 });
             } else {
@@ -111,7 +111,7 @@ function obterDadosGrafico(idMaquina, metrica, idComponente, nomeMetrica, idMetr
 
 }
 
-function receberMetricas(idMetricaAtual, idComponente, nomeMetrica) {
+function receberMetricas(idMetricaAtual, idComponente, nomeMetrica, tipoComponente) {
 
     fetch(`/metricas/${sessionStorage.MAC_SERVIDOR}/${idComponente}/${idMetricaAtual}`, {
         method: "POST",
@@ -121,7 +121,7 @@ function receberMetricas(idMetricaAtual, idComponente, nomeMetrica) {
     }).then(response => {
             if(response.ok) {
                 response.json().then(resposta => {
-                    listarMetricasDisponiveis(resposta, idComponente, idMetricaAtual, nomeMetrica)
+                    listarMetricasDisponiveis(resposta, idComponente, idMetricaAtual, nomeMetrica, tipoComponente)
                 })
             } else {
                 console.error('Nenhum dado encontrado ou erro na API');

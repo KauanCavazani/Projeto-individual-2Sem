@@ -152,11 +152,9 @@ function getPredict(req, res) {
                         meses.push([i])
                     };            
                     
-                    console.log(dados, meses)
-
                     const regressao = new rls(meses, dados)
 
-                    res.status(200).json(regressao.predict([4]));                
+                    res.status(200).json(regressao.predict([dados.length + 1]));                
                 } else {
                     res.status(204).send("Nenhum resultado encontrado!")
                 }
