@@ -221,23 +221,17 @@ SELECT
 	unidadeMedida,
 	(SELECT 
 		COUNT(idComponente) 
-	FROM 
-		metrica
-	JOIN 
-		parametro ON fkMetrica = idMetrica
-	JOIN 
-		componente ON idComponente = fkComponente_idComponente
+	FROM metrica
+	JOIN parametro ON fkMetrica = idMetrica
+	JOIN componente ON idComponente = fkComponente_idComponente
 	) AS qtdMetricas
-FROM 
-	leitura l
-JOIN
-	servidor s ON s.idServidor = l.fkComponente_fkServidor 
-JOIN 
-	torre t ON t.idTorre = s.fkTorre 
-JOIN 
-	metrica m ON m.idMetrica = l.fkMetrica
-GROUP BY
-	mes, idServidor, idComponente, idTorre, fkMetrica;
+FROM leitura l
+JOIN servidor s ON s.idServidor = l.fkComponente_fkServidor 
+JOIN torre t ON t.idTorre = s.fkTorre 
+JOIN metrica m ON m.idMetrica = l.fkMetrica
+GROUP BY mes, idServidor, idComponente, idTorre, fkMetrica
+ORDER BY mes;
+	
 	
 -- cardápio
 INSERT INTO metrica (idMetrica, nomeComponente, nomeMetrica, nomeView, comando, unidadeMedida, isTupla) VALUES 
