@@ -295,6 +295,7 @@
 
     function plotarGrafico(metrica, resposta, idComponente, nomeMetrica, idMetrica, mes, tipoComponente, isSegundoEixo) {
         sessionStorage.NOME_METRICA = nomeMetrica
+        sessionStorage.TIPO_COMPONENTE = tipoComponente
         document.getElementById('section-choose').style.display = 'none';
         document.getElementById('section-analytics').style.display = 'block';
 
@@ -383,7 +384,7 @@
         idMetricaAtual = isSegundoEixo ? idMetricaAtual : idMetrica
 
         areaSelectMes.innerHTML = `
-        <select class="dropdown-toggle btn btn-sm btn-select" id="selecionar-mes" onchange="obterDadosGrafico('${sessionStorage.MAC_SERVIDOR}', '${metrica}', ${idComponente}, '${nomeMetrica}', ${idMetricaAtual}, null, ${tipoComponente}, false)">
+        <select class="dropdown-toggle btn btn-sm btn-select" id="selecionar-mes" onchange="obterDadosGrafico('${sessionStorage.MAC_SERVIDOR}', '${metrica}', ${idComponente}, '${nomeMetrica}', ${idMetricaAtual}, null, '${tipoComponente}', false)">
             <option value="null">Selecionar o Mês</option>
         </select>
         `
@@ -420,7 +421,7 @@
         const areaSelectMetrica = document.getElementById('area-select-metrica')
 
         areaSelectMetrica.innerHTML = `
-        <select class="dropdown-toggle btn btn-sm btn-select" id="selecionar-metrica" onchange="obterDadosGrafico('${sessionStorage.MAC_SERVIDOR}', 'mediaPorDia', ${idComponente}, '${nomeMetrica}', null, null, ${tipoComponente}, true)">
+        <select class="dropdown-toggle btn btn-sm btn-select" id="selecionar-metrica" onchange="obterDadosGrafico('${sessionStorage.MAC_SERVIDOR}', 'mediaPorDia', ${idComponente}, '${nomeMetrica}', null, null, '${tipoComponente}', true)">
             <option value="null">Selecionar a Métrica</option>
         </select>
         `
@@ -436,6 +437,8 @@
 
     async function exibirDadosAnalytics(res, idComponente, idMetrica, mes) {
 
+        sessionStorage.MES_ATUAL = parseInt(mes)
+
         var spanMediaMes = document.getElementById('span-mediaMes')
         var spanQtdMetricas = document.getElementById('span-qtdMetricas')
         var spanMediaMesEstatistica = document.getElementById('span-mediaMesEstatistica')
@@ -449,12 +452,14 @@
         var spanPrevisaoEstatistica = document.getElementById('span-previsaoEstatistica')
         var spanProxMes = document.getElementById('span-proxMes')
 
-        spanProxMes.innerText = meses[parseInt(mes)]
-
         console.log(res)
+
+        spanProxMes.innerText = meses[parseInt(mes)]
 
         var mediaUso = parseFloat(res[1].media);        
         var diferencaMediaMes = mediaUso - parseFloat(res[0].media)
+
+        console.log(mediaUso, parseFloat(res[0].media), mediaUso - parseFloat(res[0].media))
 
         diferencaMediaMes = diferencaMediaMes.toFixed(0) == 0 ? 0 : diferencaMediaMes;
 
@@ -492,15 +497,15 @@
         spanMediaMesEstatistica.innerText = diferencaMediaMes.toFixed(0) + res[0].unidadeMedida;
         spanQtdMetricas.innerText = res[0].qtdMetricas;
 
+        var previsao = null
+        var diferencaMediaMesPrevisao = null;
 
         if(parseInt(mes) == new Date().getMonth()) {
         
             document.getElementById('card-previsao').style.display = 'block';
 
-            var previsao = await preverDadosProximoMes(idComponente, idMetrica, mes)
-            var diferencaMediaMesPrevisao = previsao - mediaUso;
-
-            console.log(previsao, mediaUso, previsao - mediaUso)
+            previsao = await preverDadosProximoMes(idComponente, idMetrica, mes)
+            diferencaMediaMesPrevisao = previsao - mediaUso;
 
             diferencaMediaMesPrevisao = diferencaMediaMesPrevisao.toFixed(0) == 0 ? 0 : diferencaMediaMesPrevisao;
 
@@ -531,6 +536,17 @@
             document.getElementById('card-previsao').style.display = 'none';
         }
 
+        console.log(previsao, diferencaMediaMesPrevisao)
+
+        var dadosAnalytics = [
+            {media: mediaUso.toFixed(0), diferenca: diferencaMediaMes.toFixed(0), unidadeMedida: res[0].unidadeMedida},
+            {media: previsao, diferenca: diferencaMediaMesPrevisao, unidadeMedida: res[0].unidadeMedida},
+            {media: res[0].qtdMetricas, diferenca: null, unidadeMedida: null}
+        ]
+
+        sessionStorage.DADOS_ANALYTICS = JSON.stringify(dadosAnalytics);
+
+        console.log(sessionStorage.DADOS_ANALYTICS)
 
     }
 
